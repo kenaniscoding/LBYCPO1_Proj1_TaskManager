@@ -1,0 +1,101 @@
+#!/bin/bash
+
+
+
+# Function to display running processes
+view_processes() {
+    echo "Running processes:"
+    ps -ef | less
+}
+
+# Function to kill a process by PID
+kill_process() {
+    read -p "Enter the PID of the process to kill: " pid
+    if kill -9 $pid 2>/dev/null; then
+        echo "Process $pid killed successfully."
+    else
+        echo "Failed to kill process $pid. Please check the PID and try again."
+    fi
+}
+
+# Function to display system resource usage
+view_CPU() {
+    # CPU usage using vmstat #
+	echo "-----------------------------" 
+	echo "      >>> CPU INFO <<<"
+	echo "-----------------------------" 
+	cpu_usage=$(vmstat 1 2 | tail -1 | awk '{print 100 - $15"%"}')
+	echo "CPU USAGE : $cpu_usage"
+	echo "CPU CORES : $(grep -c "processor" /proc/cpuinfo)"
+	echo
+}
+view_Memory(){
+	echo "-----------------------------" 
+	echo "    >>> MEMORY INFO <<<"
+	echo "-----------------------------"
+
+	echo "Total Memory : $(free -m | grep Mem | awk '{print $2 " MB"}')"
+	echo "Used Memory : $(free -m | grep Mem | awk '{print $3 " MB"}')"
+	echo "Free Memory : $(free -m | grep Mem | awk '{print $4 " MB"}')"
+	echo 
+}
+view_Storage(){
+    echo "-----------------------------"
+	echo "    >>> STORAGE DATA <<<"
+	echo "-----------------------------"
+	df -h
+    echo
+}
+# Function to display the menu
+show_menu() {
+    echo "======================="
+    echo "Text Based Task Manager"
+    echo "======================="
+    echo "1. View running processes"
+    echo "2. Kill a process by PID"
+    echo "3. View CPU Usage"
+    echo "4. View Memory Usage"
+    echo "5. View Disk Usage"
+    echo "6. View System Uptime"
+    echo "7. Exit"
+    echo
+}
+view_Uptime(){
+    echo "System Uptime:"
+    uptime -p
+    echo
+}
+# Main loop
+while true; do
+    show_menu
+    read -p "Choose an option: " option
+    case $option in
+        1)
+            view_processes
+            ;;
+        2)
+            kill_process
+            ;;
+        3)
+            view_CPU
+            ;;
+        4)
+            view_Memory
+            ;;
+        5)
+            view_Storage
+            ;;
+        6) 
+            view_Uptime
+            ;;
+        7)
+            echo "Exiting Task Manager."
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please try again."
+            ;;
+    esac
+    echo
+done
+
