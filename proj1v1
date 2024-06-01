@@ -17,22 +17,33 @@ kill_process() {
         echo "Failed to kill process $pid. Please check the PID and try again."
     fi
 }
-
+# Function to get user input for the top n processes
+get_num_process() {
+    read -p "Enter the number of top processes to display: " TOP_N
+    if ! [[ "$TOP_N" =~ ^[0-9]+$ ]]; then
+        echo "Invalid input. Please enter a numeric value."
+    fi
+}
 # Function to display system resource usage
 view_CPU() {
     # CPU usage using vmstat #
-	echo "-----------------------------" 
-	echo "      >>> CPU INFO <<<"
-	echo "-----------------------------" 
+    echo "============================="
+	echo "=       CPU INFO            ="
+    echo "============================="
 	cpu_usage=$(vmstat 1 2 | tail -1 | awk '{print 100 - $15"%"}')
 	echo "CPU USAGE : $cpu_usage"
 	echo "CPU CORES : $(grep -c "processor" /proc/cpuinfo)"
+    echo "CPU Usage:"
+    top -bn1 | grep "Cpu(s)" | \
+    sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
+    awk '{print 100 - $1 "%"}'
+    echo
 	echo
 }
 view_Memory(){
-	echo "-----------------------------" 
-	echo "    >>> MEMORY INFO <<<"
-	echo "-----------------------------"
+    echo "============================="
+	echo "=       MEMORY INFO         ="
+	echo "============================="
 
 	echo "Total Memory : $(free -m | grep Mem | awk '{print $2 " MB"}')"
 	echo "Used Memory : $(free -m | grep Mem | awk '{print $3 " MB"}')"
@@ -40,17 +51,17 @@ view_Memory(){
 	echo 
 }
 view_Storage(){
-    echo "-----------------------------"
-	echo "    >>> STORAGE DATA <<<"
-	echo "-----------------------------"
+    echo "============================="
+	echo "=       STORAGE INFO        ="
+	echo "============================="
 	df -h
     echo
 }
 # Function to display the menu
 show_menu() {
-    echo "======================="
-    echo "Text Based Task Manager"
-    echo "======================="
+    echo "============================="
+    echo "=       TASK MANAGER        ="
+    echo "============================="
     echo "1. View running processes"
     echo "2. Kill a process by PID"
     echo "3. View CPU Usage"
@@ -61,7 +72,9 @@ show_menu() {
     echo
 }
 view_Uptime(){
-    echo "System Uptime:"
+    echo "============================="
+    echo "=      SYSTEM UPTIME        ="
+    echo "============================="
     uptime -p
     echo
 }
@@ -71,21 +84,27 @@ while true; do
     read -p "Choose an option: " option
     case $option in
         1)
+            echo
             view_processes
             ;;
         2)
+            echo
             kill_process
             ;;
         3)
+            echo
             view_CPU
             ;;
         4)
+            echo
             view_Memory
             ;;
         5)
+            echo
             view_Storage
             ;;
         6) 
+            echo
             view_Uptime
             ;;
         7)
