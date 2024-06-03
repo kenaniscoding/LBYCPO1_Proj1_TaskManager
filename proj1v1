@@ -1,22 +1,41 @@
 #!/bin/bash
 
-
-
 # Function to display running processes
 view_processes() {
-    echo "Running processes:"
-    ps -ef | less
+    echo "Running PID Processes:"
+    ps -e
+    echo
+}
+# Function to display top N processes by memory usage
+top_memory_processes() {
+    echo "Top $TOP_N Processes by Memory Usage:"
+    ps aux --sort=-%mem | head -n $((TOP_N+1))
+    echo
 }
 
-# Function to kill a process by PID
+# Function to display top N processes by CPU usage
+top_cpu_processes() {
+    echo "Top $TOP_N Processes by CPU Usage:"
+    ps aux --sort=-%cpu | head -n $((TOP_N+1))
+    echo
+}
+
+# Function to display processes sorted by name
+sorted_processes_by_name() {
+    echo "Processes Sorted by Name:"
+    ps aux --sort=user,pid | awk 'NR<=11{print $0}'
+    echo
+}
+# Function to kill a process by PID 50594
 kill_process() {
     read -p "Enter the PID of the process to kill: " pid
-    if kill -9 $pid 2>/dev/null; then
+    if sudo kill -9 $pid 2>/dev/null; then
         echo "Process $pid killed successfully."
     else
         echo "Failed to kill process $pid. Please check the PID and try again."
     fi
 }
+
 # Function to get user input for the top n processes
 get_num_process() {
     read -p "Enter the number of top processes to display: " TOP_N
@@ -37,7 +56,6 @@ view_CPU() {
     top -bn1 | grep "Cpu(s)" | \
     sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
     awk '{print 100 - $1 "%"}'
-    echo
 	echo
 }
 view_Memory(){
@@ -57,25 +75,221 @@ view_Storage(){
 	df -h
     echo
 }
-# Function to display the menu
-show_menu() {
-    echo "============================="
-    echo "=       TASK MANAGER        ="
-    echo "============================="
-    echo "1. View running processes"
-    echo "2. Kill a process by PID"
-    echo "3. View CPU Usage"
-    echo "4. View Memory Usage"
-    echo "5. View Disk Usage"
-    echo "6. View System Uptime"
-    echo "7. Exit"
+show_resources(){
+    while true; do
+       echo "============================="
+       echo "=       RESOURCES           ="
+       echo "============================="
+       echo "1. View CPU Usage"
+       echo "2. View Memory Usage"
+       echo "3. View Disk Usage"
+       echo "4. View System Uptime"
+       echo "5. Back"
+       echo
+       read -p "Choose an option: " option2
+       case $option2 in
+           1)
+               echo
+               view_CPU
+               while true; do
+                   read -p "Want to view top CPU usage (y/n): " option3
+                   if [ "$option3" == "y" ]; then
+                       echo 
+                       get_num_process
+                       top_cpu_processes
+                       echo
+                       break
+                   elif [ "$option3" == "n" ]; then
+                    echo
+                    echo "Ok going back"
+                    echo
+                       break
+                   else
+                       echo "Error! Input either y or n"
+                   fi
+               done
+               ;;
+           2)
+               echo
+               view_Memory
+               while true; do
+                   read -p "Want to view top Memory usage (y/n): " option3
+                   if [ "$option3" == "y" ]; then
+                       echo 
+                       get_num_process
+                       top_memory_processes
+                       echo
+                       break
+                   elif [ "$option3" == "n" ]; then
+                    echo
+                    echo "Ok going back"
+                    echo
+                       break
+                   else
+                       echo "Error! Input either y or n"
+                   fi
+               done
+               ;;
+           3)
+               echo
+               view_Storage
+               ;;
+           4)
+               echo
+               view_Uptime
+               ;;
+           5)
+               echo
+               break
+               ;;
+           *)
+               echo "Invalid option. Please try again."
+               ;;
+       esac
+   done
+
+}
+# Function to display the process management menu
+show_processes() {
+    while true; do
+        echo "============================="
+        echo "=       PROCESSES           ="
+        echo "============================="
+        echo "1. View Running PID Processes"
+        echo "2. Kill PID"
+        echo "3. Search PID"
+        echo "4. Back"
+        echo
+        read -p "Choose an option: " option2
+        case $option2 in
+            1)
+                echo
+                view_processes
+                ;;
+            2)
+                echo
+                kill_process
+                ;;
+            3)
+                echo
+                search_processes
+                ;;
+            4)
+                break
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
+}
+
+search_processes() {
+    while true; do
+    read -p "Enter the PID: " pid
+    if ps -p "$pid" > /dev/null 2>&1; then
+        echo "Properties of PID $pid:"
+        ps -p "$pid" -o pid,ppid,cmd,%mem,%cpu,stat,start_time
+        break
+    else
+        echo "Process with PID $pid not found."
+    fi
+    done
+
+}
+
+change_file_directory() {
+    read -p "Enter the directory path: " directory
+    cd "$directory" || { 
+        echo "Directory not found. Please try again."; 
+    return 1; 
+    }
     echo
+}
+
+list_files() {
+    ls
+    echo
+}
+
+create_files() {
+    read -p "Enter file name(s) separated by space: " files
+    touch $files
+    echo
+}
+
+move_files() {
+    read -p "Enter source file path: " source_file
+    read -p "Enter destination directory path: " destination_directory
+    mv "$source_file" "$destination_directory"
+    echo
+}
+
+delete_files() {
+    read -p "Enter file name(s) separated by space: " files
+    rm $files
+    echo
+}
+
+
+show__filesystem(){
+    while true; do
+        echo "============================="
+        echo "=       FILE SYSTEM         ="
+        echo "============================="
+        echo "1. Change File Directory"
+        echo "2. List Files"
+        echo "3. Create File"
+        echo "4. Rename/Move File"
+        echo "5. Delete File"
+        echo "6. Back"
+        echo
+        read -p "Choose an option: " option2
+        case $option2 in
+            1)
+                echo
+                change_file_directory
+                ;;
+            2)
+                echo
+                list_files
+                ;;
+            3)
+                echo
+                create_files
+                ;;
+            4) 
+                echo   
+                move_files
+                ;;
+            5)
+                echo 
+                delete_files
+                ;;
+            6)
+                break
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
 }
 view_Uptime(){
     echo "============================="
     echo "=      SYSTEM UPTIME        ="
     echo "============================="
     uptime -p
+    echo
+}
+show_menu(){
+    echo "============================="
+    echo "=       TASK MANAGER        ="
+    echo "============================="
+    echo "1. Processes"
+    echo "2. Resources"
+    echo "3. File Systems"
+    echo "4. Exit"
     echo
 }
 # Main loop
@@ -85,30 +299,20 @@ while true; do
     case $option in
         1)
             echo
-            view_processes
+            show_processes
             ;;
         2)
             echo
-            kill_process
+            show_resources
             ;;
         3)
             echo
-            view_CPU
+            show__filesystem
             ;;
         4)
             echo
-            view_Memory
-            ;;
-        5)
-            echo
-            view_Storage
-            ;;
-        6) 
-            echo
-            view_Uptime
-            ;;
-        7)
             echo "Exiting Task Manager."
+            echo
             exit 0
             ;;
         *)
