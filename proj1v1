@@ -6,19 +6,39 @@ view_processes() {
     ps -e
     echo
 }
+top_start_processes(){
+    echo "Top $TOP_N Processes by Start Time:"
+    ps aux --sort=start_time | head -n $((TOP_N + 1))
+    echo
+}
+top_time_processes(){
+    echo "Top $TOP_N Processes by CPU Time:"
+    ps aux --sort=-cputime | head -n $((TOP_N + 1))
+    echo
+}
 # Function to display top N processes by memory usage
 top_memory_processes() {
     echo "Top $TOP_N Processes by Memory Usage:"
     ps aux --sort=-%mem | head -n $((TOP_N+1))
     echo
 }
-
+top_pid_processes(){
+    echo "Top $TOP_N Processes by PID number:"
+    ps aux --sort=-pid | head -n $((TOP_N + 1))
+    echo
+}
 # Function to display top N processes by CPU usage
 top_cpu_processes() {
     echo "Top $TOP_N Processes by CPU Usage:"
     ps aux --sort=-%cpu | head -n $((TOP_N+1))
     echo
 }
+top_rss_processes(){
+    echo "Top $TOP_N Processes by RSS number:"
+    ps aux --sort=-rss | head -n $((TOP_N + 1))
+    echo
+}
+
 
 # Function to display processes sorted by name
 sorted_processes_by_name() {
@@ -49,13 +69,14 @@ view_CPU() {
     echo "============================="
 	echo "=       CPU INFO            ="
     echo "============================="
-	cpu_usage=$(vmstat 1 2 | tail -1 | awk '{print 100 - $15"%"}')
-	echo "CPU USAGE : $cpu_usage"
-	echo "CPU CORES : $(grep -c "processor" /proc/cpuinfo)"
-    echo "CPU Usage:"
-    top -bn1 | grep "Cpu(s)" | \
+	
+    cpu=$(top -bn1 | grep "Cpu(s)" | \
     sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
-    awk '{print 100 - $1 "%"}'
+    awk '{print 100 - $1 "%"}')    
+	#echo "CPU USAGE : $cpu_usage"
+	echo "CPU CORES : $(grep -c "processor" /proc/cpuinfo)"
+    echo "CPU USAGE : $cpu"
+    
 	echo
 }
 view_Memory(){
@@ -231,7 +252,6 @@ delete_files() {
     echo
 }
 
-
 show__filesystem(){
     while true; do
         echo "============================="
@@ -280,7 +300,65 @@ view_Uptime(){
     echo "=      SYSTEM UPTIME        ="
     echo "============================="
     uptime -p
-    echo
+}
+sort(){
+while true; do
+        echo "============================="
+        echo "=        SORTING            ="
+        echo "============================="
+        echo "1. User"
+        echo "2. PID"
+        echo "3. CPU"
+        echo "4. Memory"
+        echo "5. RSS"
+        echo "6. Start"
+        echo "7. Time"
+        echo "8. Back"
+        echo
+        read -p "Choose an option: " option2
+        case $option2 in
+            1)
+                echo
+                sorted_processes_by_name
+                ;;
+            2)
+                echo
+                get_num_process
+                top_pid_processes
+                ;;
+            3)
+                echo
+                get_num_process
+                top_cpu_processes
+                ;;
+            4) 
+                echo   
+                get_num_process
+                top_memory_processes
+                ;;
+            5)
+                echo 
+                get_num_process
+                top_rss_processes
+                ;;
+            6) 
+                echo
+                get_num_process
+                top_start_processes
+                ;;
+            7)
+                echo   
+                get_num_process
+                top_time_processes
+                ;;
+            8)
+                break
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
 }
 show_menu(){
     echo "============================="
@@ -289,7 +367,8 @@ show_menu(){
     echo "1. Processes"
     echo "2. Resources"
     echo "3. File Systems"
-    echo "4. Exit"
+    echo "4. Sort"
+    echo "5. Exit"
     echo
 }
 # Main loop
@@ -309,7 +388,11 @@ while true; do
             echo
             show__filesystem
             ;;
-        4)
+        4) 
+            echo
+            sort
+            ;;
+        5)
             echo
             echo "Exiting Task Manager."
             echo
