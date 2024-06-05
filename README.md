@@ -1,4 +1,6 @@
 # LBYCPO1_Proj1_TaskManager
+![Uploading Screenshot from 2024-06-05 14-03-17.png…]()
+
 ## How to run
 ### go to the location of the shell script file
 ```
