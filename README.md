@@ -1,6 +1,5 @@
 # LBYCPO1_Proj1_TaskManager
-![Uploading Screenshot from 2024-06-05 14-03-17.png…]()
-
+![Screenshot from 2024-06-05 14-03-17](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/3d4c3086-2a94-4fc1-80d3-245b14675cfb)
 ## How to run
 ### go to the location of the shell script file
 ```
