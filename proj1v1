@@ -69,25 +69,21 @@ view_CPU() {
     echo "============================="
 	echo "=       CPU INFO            ="
     echo "============================="
-	
     cpu=$(top -bn1 | grep "Cpu(s)" | \
     sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
     awk '{print 100 - $1 "%"}')    
-	#echo "CPU USAGE : $cpu_usage"
 	echo "CPU CORES : $(grep -c "processor" /proc/cpuinfo)"
     echo "CPU USAGE : $cpu"
-    
+    mpstat -P ALL 1 1 | awk '/^Average/ && $2 ~ /[0-9]+/ {print "CPU" $2 " usage: " 100 - $12 "%"}'
 	echo
 }
 view_Memory(){
     echo "============================="
 	echo "=       MEMORY INFO         ="
 	echo "============================="
-
-	echo "Total Memory : $(free -m | grep Mem | awk '{print $2 " MB"}')"
-	echo "Used Memory : $(free -m | grep Mem | awk '{print $3 " MB"}')"
-	echo "Free Memory : $(free -m | grep Mem | awk '{print $4 " MB"}')"
-	echo 
+    free -h | awk '/^Mem/ {print "\nTotal: " $2, "\nUsed: " $3, "\nFree: " $4, "\nShared: " $5, "\nBuff/cache: " $6, "\nAvailable: " $7}'
+    free | awk '/^Mem/ {printf "\nMemory Usage: %.2f%%\n", $3/$2 * 100.0}'
+    echo
 }
 view_Storage(){
     echo "============================="
@@ -300,6 +296,7 @@ view_Uptime(){
     echo "=      SYSTEM UPTIME        ="
     echo "============================="
     uptime -p
+    echo
 }
 sort(){
 while true; do
@@ -404,4 +401,3 @@ while true; do
     esac
     echo
 done
-
