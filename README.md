@@ -8,6 +8,13 @@ cd ./proj1
 ```
 ./proj1v1
 ```
+### download sysstat if needed
+```
+sudo apt-get update
+```
+```
+sudo apt-get install -y sysstat
+```
 ## Example Outputs
 ![Screenshot from 2024-06-03 21-19-34](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/42034ff2-79f3-44fa-9bd4-d15b080d7806)
 
