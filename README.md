@@ -1,5 +1,10 @@
 # LBYCPO1_Proj1_TaskManager
 ## How to run
+### go to the location of the shell script file
+```
+cd ./proj1
+```
+### execute the shell script
 ```
 ./proj1v1
 ```
