@@ -1,5 +1,10 @@
 # LBYCPO1_Proj1_TaskManager
 ![Screenshot from 2024-06-05 14-03-17](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/3d4c3086-2a94-4fc1-80d3-245b14675cfb)
+## Features
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/df3cad11-eef6-4826-9e36-9c48344a6871)
+![Screenshot from 2024-06-05 14-05-32](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/49e0dc2c-2601-437b-9209-3c471dac86cb)
+![Screenshot from 2024-06-05 14-06-23](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/2fd93b0e-2aad-485a-97c9-5227e6a3d477)
+![Screenshot from 2024-06-05 14-06-52](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/8f6797d4-1aeb-481d-870c-d787b245671c)
 ## How to run
 ### go to the location of the shell script file
 ```
