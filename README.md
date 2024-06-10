@@ -7,6 +7,20 @@
 ![Screenshot from 2024-06-05 14-06-52](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/8f6797d4-1aeb-481d-870c-d787b245671c)
 ## Video Demo Link
 [GDriveLink](https://drive.google.com/file/d/1cli_Yeb8DqDk12YaYxn3znilC86kYJlJ/view?usp=sharing)
+## Flowcharts
+
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/bc76a276-1ac0-46d6-8f97-e9e5afde91e4)
+
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/62a18f9a-cdd2-42f4-86f9-6acfad3febe8)
+
+
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/ad3c43cf-76ee-4c82-af6e-6e935cdbfcee)
+
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/01ef5b44-53cc-46c9-96be-d544d5974f7e)
+
+
+![image](https://github.com/kenaniscoding/LBYCPO1_Proj1_TaskManager/assets/112913035/e2898cb6-c1c5-40e1-8edd-632bd6553f75)
+
 ## How to run
 ### go to the location of the shell script file
 ```
